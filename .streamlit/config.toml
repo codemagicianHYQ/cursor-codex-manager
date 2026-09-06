@@ -1,0 +1,14 @@
+[theme]
+base = "dark"
+primaryColor = "#6cb6ff"
+backgroundColor = "#2b303b"
+secondaryBackgroundColor = "#363d4a"
+textColor = "#e6edf3"
+font = "sans serif"
+
+[client]
+# viewer：菜单更干净；主题已由上方 [theme] 锁定，不会出现切换
+toolbarMode = "viewer"
+
+[browser]
+gatherUsageStats = false

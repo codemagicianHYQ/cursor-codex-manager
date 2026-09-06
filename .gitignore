@@ -1,0 +1,23 @@
+# runtime / local
+data/backups/
+data/streamlit.log
+data/title_overrides.json
+data/chat_allowlist.json
+data/project_excludes.json
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+.env
+.env.*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.lnk
+
+# Streamlit cache
+.streamlit/secrets.toml

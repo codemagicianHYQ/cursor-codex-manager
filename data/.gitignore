@@ -1,0 +1,4 @@
+# Local runtime only — never commit backups / logs / overrides
+*
+!.gitignore
+!.gitkeep
