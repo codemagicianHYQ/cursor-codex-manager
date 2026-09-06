@@ -503,8 +503,30 @@ with tab_ws:
         m2.metric("幽灵", sum(1 for i in items if not i.exists))
         m3.metric("repo", sum(1 for i in items if i.kind == "repo"))
 
+        # 表格最多展示 300 条；全选只作用于当前可见行
+        view_items = items[:300]
+        s1, s2, s3 = st.columns([1, 1, 3])
+        with s1:
+            if st.button("全选", key="ws_select_all", use_container_width=True):
+                st.session_state["ws_table"] = {
+                    "selection": {
+                        "rows": list(range(len(view_items))),
+                        "columns": [],
+                        "cells": [],
+                    }
+                }
+                st.rerun()
+        with s2:
+            if st.button("取消全选", key="ws_select_none", use_container_width=True):
+                st.session_state["ws_table"] = {
+                    "selection": {"rows": [], "columns": [], "cells": []}
+                }
+                st.rerun()
+        with s3:
+            st.caption("可用「全选 / 取消全选」，或点表格左侧逐行勾选。")
+
         rows = []
-        for item in items[:300]:
+        for item in view_items:
             rows.append(
                 {
                     "名称": item.display_name,
@@ -542,9 +564,9 @@ with tab_ws:
                 key="ws_batch_del",
             )
         with a2:
-            st.caption("点表格左侧多选。远程 SSH/WSL 也可清（只清本地缓存）。")
+            st.caption("远程 SSH/WSL 也可清（只清本地缓存，不删磁盘源码）。")
         if do_del and allow_write:
-            paths = [items[i].path for i in sel_idx if 0 <= i < len(items)]
+            paths = [view_items[i].path for i in sel_idx if 0 <= i < len(view_items)]
             bak = backup_workspace_paths(store, paths, reason="workspace-remove")
             for p in paths:
                 ws_store.remove_workspace(p)
@@ -652,6 +674,26 @@ with tab_chats:
         c1.metric("本项目", len(flat))
         c2.metric("侧边栏同源", n_side)
         c3.metric("仅 Data", len(flat) - n_side)
+
+        cs1, cs2, cs3 = st.columns([1, 1, 3])
+        with cs1:
+            if st.button("全选", key="chat_select_all", use_container_width=True):
+                st.session_state[table_key] = {
+                    "selection": {
+                        "rows": list(range(len(flat))),
+                        "columns": [],
+                        "cells": [],
+                    }
+                }
+                st.rerun()
+        with cs2:
+            if st.button("取消全选", key="chat_select_none", use_container_width=True):
+                st.session_state[table_key] = {
+                    "selection": {"rows": [], "columns": [], "cells": []}
+                }
+                st.rerun()
+        with cs3:
+            st.caption("「全选」勾当前项目列表；也可用下方「本项目全部」直接操作。")
 
         chat_rows = []
         for r in flat:
